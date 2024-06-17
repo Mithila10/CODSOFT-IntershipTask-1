@@ -1,0 +1,37 @@
+#Student Grade Calculator
+
+import java.util.Scanner;
+public class GradeCalculator {
+    public static void main(String[] args) {
+        int numberOfSubjects = 6;
+        int sumSubjects = 0;
+        int percentage;
+
+        Scanner sc = new Scanner(System.in);
+
+        String[] subjectNames = {"Mathematics", "Science", "History", "English", "Computer Science", "language"};
+
+        for (int i = 0; i < numberOfSubjects; i++) {
+            System.out.println("Enter marks for " + subjectNames[i] + ": ");
+            sumSubjects = sumSubjects + sc.nextInt();
+        }
+
+        sc.close(); // Close the scanner after usage
+
+        percentage = sumSubjects / numberOfSubjects; // Integer division here
+        System.out.println("Sum of all subjects: " + sumSubjects);
+        System.out.println("Percentage: " + percentage + "%");
+
+        if (percentage < 40) {
+            System.out.println("Grade: Failed");
+        } else if (percentage >= 40 && percentage < 60) {
+            System.out.println("Grade: C");
+        } else if (percentage >= 60 && percentage < 80) {
+            System.out.println("Grade: B");
+        } else if (percentage >= 80 && percentage <= 100) {
+            System.out.println("Grade: A++");
+        } else {
+            System.out.println("Invalid Marks. Please enter valid marks.");
+        }
+    }
+}
