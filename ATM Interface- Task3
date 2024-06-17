@@ -1,0 +1,132 @@
+#ATM Interface
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ATMInterface {
+    private Account accnt;
+    private ArrayList<Transaction> transactionHistory;
+
+    public ATMInterface() {
+        accnt = new Account();
+        transactionHistory = new ArrayList<>();
+    }
+
+    public static void main(String[] args) {
+        ATMInterface atmInterface = new ATMInterface();
+        atmInterface.runATM();
+    }
+
+    public void runATM() {
+        Scanner sc = new Scanner(System.in);
+        boolean exitFlag = false;
+
+        while (!exitFlag) {
+            printMenu();
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    depositMoney();
+                    break;
+                case 2:
+                    withdrawMoney();
+                    break;
+                case 3:
+                    checkBalance();
+                    break;
+                case 4:
+                    exitFlag = true;
+                    System.out.println("Closing Application. Thank you !!!");
+                    break;
+                case 5:
+                    printTransactionHistory();
+                    break;
+                default:
+                    System.out.println("Please enter values between 1 to 5 to proceed.");
+            }
+            System.out.println();
+        }
+        sc.close(); // Close the scanner after usage
+    }
+
+    private void printMenu() {
+        System.out.println("Please choose below options: ");
+        System.out.println("1. Deposit Money");
+        System.out.println("2. Withdraw Money");
+        System.out.println("3. Check Balance");
+        System.out.println("4. Exit");
+        System.out.println("5. View Transaction History");
+    }
+
+    private void depositMoney() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter amount to be deposited: ");
+        double amount = sc.nextDouble();
+        double updatedAmt = accnt.getAccountBalance() + amount;
+        accnt.setAccountBalance(updatedAmt);
+        recordTransaction(amount, "Deposit");
+        System.out.println("Transaction successful! Updated balance is: " + updatedAmt);
+        System.out.flush(); // Flush output
+    }
+
+    private void withdrawMoney() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter amount to withdraw: ");
+        double amount = sc.nextDouble();
+        if (amount > accnt.getAccountBalance()) {
+            System.out.println("Insufficient Funds !!! Your current balance is: " + accnt.getAccountBalance());
+        } else {
+            double updatedAmt = accnt.getAccountBalance() - amount;
+            accnt.setAccountBalance(updatedAmt);
+            recordTransaction(amount, "Withdrawal");
+            System.out.println("Your account balance is: " + updatedAmt);
+            System.out.flush(); // Flush output
+        }
+    }
+
+    private void checkBalance() {
+        System.out.println("Your account balance is: " + accnt.getAccountBalance());
+        System.out.flush(); // Flush output
+    }
+
+    private void recordTransaction(double amount, String type) {
+        Transaction transaction = new Transaction(amount, type);
+        transactionHistory.add(transaction);
+    }
+
+    private void printTransactionHistory() {
+        System.err.println("Transaction History:"); // Using System.err for immediate output
+        for (Transaction transaction : transactionHistory) {
+            System.err.println(transaction); // Using System.err for immediate output
+        }
+    }
+}
+
+class Account {
+    private double accountBalance;
+
+    public double getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(double accountBalance) {
+        this.accountBalance = accountBalance;
+    }
+}
+
+class Transaction {
+    private double amount;
+    private String type;
+    private String timestamp;
+
+    public Transaction(double amount, String type) {
+        this.amount = amount;
+        this.type = type;
+        this.timestamp = java.time.LocalDateTime.now().toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Type: " + type + ", Amount: " + amount + ", Timestamp: " + timestamp;
+    }
+}
